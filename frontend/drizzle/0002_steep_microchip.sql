@@ -1,0 +1,1 @@
+ALTER TABLE "user_submissions" ADD COLUMN "latest_submission_date" date;
