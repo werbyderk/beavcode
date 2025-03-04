@@ -1,21 +1,29 @@
 from flask import Flask, request
 import subprocess
 import json
+import os
 
 app = Flask(__name__)
+
+@app.route("/unittest", methods=['POST', 'DELETE'])
+def unittest():
+    unittest_py_code = request.files['test']
+    if not unittest_py_code:
+        return 'Bad request'
+    with open('../run_env/test.py', 'wb') as dest:
+        dest.write(unittest_py_code.stream.read())
 
 @app.route("/run", methods=['POST'])
 def run():
     submission_py_code = request.files['submission']
-    unittest_py_code = request.files['test']
+    
 
-    if not submission_py_code or not unittest_py_code:
+    if not submission_py_code:
         return 'Bad request'
 
     with open('../run_env/submission.py', 'wb') as dest:
         dest.write(submission_py_code.stream.read())
-    with open('../run_env/test.py', 'wb') as dest:
-        dest.write(unittest_py_code.stream.read())
+
     try:
         proc = subprocess.run('./exec_test.sh', capture_output=True, text=True, check=False, timeout=3)
     except subprocess.TimeoutExpired:
@@ -33,4 +41,7 @@ def run():
     return test_results
 
 if __name__ == '__main__':
-    app.run(port=3000, debug=True, host='0.0.0.0')
+    if os.environ.get('development') == 'true':
+        app.run(port=3001, debug=True, host='0.0.0.0')
+    else:
+        app.run(port=3001, host='0.0.0.0')

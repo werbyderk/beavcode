@@ -33,10 +33,7 @@ const Dashboard = async () => {
 
       <div className='flex gap-4 mb-12'>
         <DifficultyDropdown />
-        <Link
-          href='/challenges'
-          className='inline-flex h-11 items-center justify-center rounded-md border border-foreground px-8 text-sm font-medium text-foreground hover:bg-foreground/10'
-        >
+        <Link href='/challenges' className='black-button hover:bg-foreground/10'>
           View all Challenges
         </Link>
       </div>

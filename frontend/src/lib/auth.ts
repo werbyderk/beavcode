@@ -7,6 +7,7 @@ import { AuthOptions } from 'next-auth'
 import { getUserFromSession } from '@/models/user'
 
 export const authOptions: AuthOptions = {
+  secret: process.env.AUTH_SECRET,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,

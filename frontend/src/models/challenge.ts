@@ -7,6 +7,14 @@ import { and, desc, eq, gte, InferSelectModel, lte } from 'drizzle-orm'
 
 dayjs.extend(weekOfYear)
 
+export const getChallenge = async (id: number) => {
+  const query = await db.select().from(challengesTable).where(eq(challengesTable.id, id)).limit(1)
+  if (query?.length) {
+    return query[0]
+  }
+  return null
+}
+
 export const getChallengesForWeek = async ({ date, difficulty }: { date: Date; difficulty?: 'easy' | 'medium' | 'hard' }) => {
   const dateStart = date ? dayjs(date).startOf('week').toDate() : epoch
   const dateEnd = date ? dayjs(date).endOf('week').toDate() : new Date()

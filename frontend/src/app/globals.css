@@ -19,3 +19,11 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.black-button {
+  @apply inline-flex h-11 items-center justify-center rounded-md border border-foreground px-8 text-sm font-medium text-foreground;
+}
+
+.black-button:hover {
+  /* @apply bg-foreground-10; */
+}
