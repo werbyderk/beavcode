@@ -1,0 +1,1 @@
+ALTER TABLE "user_submissions" ADD COLUMN "score" integer DEFAULT 0;

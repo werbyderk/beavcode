@@ -1,16 +1,17 @@
 import unittest
-import run
+import submission
 from memory_profiler import profile
 
 @profile
 def test_mem():
-    run.fn(1,2)
+    pass
+    # submission.fib(25)
 
 class TestMethods(unittest.TestCase):
-
     def test_sum(self):
-        x = run.fn(1,2)
-        self.assertEqual(x, 3)
+        '''My unittest'''
+        pass
+        #self.assertEqual(submission.fib(25), 75025)
 
 if __name__ == '__main__':
-    unittest.main()
+    test_mem()

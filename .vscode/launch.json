@@ -5,19 +5,19 @@
       "name": "Next.js: debug server-side",
       "type": "node-terminal",
       "request": "launch",
-      "command": "cd frontend && npm run dev"
-    },
-    {
-      "name": "Next.js: debug client-side",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:3000"
+      "cwd": "${workspaceFolder}/web-app",
+      "command": "npm run dev",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "/turbopack/[project]/*": "${webRoot}/*"
+      }
     },
     {
       "name": "Next.js: debug full stack",
+      "cwd": "${workspaceFolder}/web-app",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/frontend/node_modules/.bin/next",
+      "program": "${workspaceFolder}/web-app/node_modules/.bin/next",
       "runtimeArgs": ["--inspect"],
       "skipFiles": ["<node_internals>/**"],
       "serverReadyAction": {
@@ -25,8 +25,22 @@
         "killOnServerStop": true,
         "pattern": "- Local:.+(https?://.+)",
         "uriFormat": "%s",
-        "webRoot": "${workspaceFolder}"
+        "webRoot": "${workspaceFolder}/web-app"
       }
+    },
+    {
+      "name": "Python: Attach to Docker",
+      "type": "debugpy",
+      "request": "attach",
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}/pyrunner",
+          "remoteRoot": "/usr/src/app"
+        }
+      ],
+      "connect": { "host": "127.0.0.1", "port": 5678 }
+      // "port": 5678,
+      // "host": "127.0.0.1"
     }
   ]
 }

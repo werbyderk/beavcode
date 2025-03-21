@@ -1,0 +1,1 @@
+ALTER TABLE "user_submissions" ADD COLUMN "memory_usage" numeric;

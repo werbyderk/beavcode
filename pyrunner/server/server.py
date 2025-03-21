@@ -1,47 +1,52 @@
 from flask import Flask, request
+
 import subprocess
 import json
-import os
+from flask_cors import CORS, cross_origin
+import logging
+logging.basicConfig(level=logging.DEBUG)
+import sys
+# import os
+# TODO: is CORS set up right?
 
 app = Flask(__name__)
+CORS(app, support_credentials=True)
 
-@app.route("/unittest", methods=['POST', 'DELETE'])
-def unittest():
-    unittest_py_code = request.files['test']
-    if not unittest_py_code:
-        return 'Bad request'
-    with open('../run_env/test.py', 'wb') as dest:
-        dest.write(unittest_py_code.stream.read())
+@app.route("/ping", methods=['GET'])
+@cross_origin(supports_credentials=True)
+def ping():
+    return 'Pong!'
 
 @app.route("/run", methods=['POST'])
 def run():
-    submission_py_code = request.files['submission']
+    submission_py_code = request.files.get('submission')
+    unittest_py_code = request.files.get('test')
+    if not submission_py_code or not unittest_py_code:
+        return 'Bad request', 400
     
-
-    if not submission_py_code:
-        return 'Bad request'
-
     with open('../run_env/submission.py', 'wb') as dest:
         dest.write(submission_py_code.stream.read())
-
+    with open('../run_env/test.py', 'wb') as dest:
+        dest.write(unittest_py_code.stream.read())
     try:
-        proc = subprocess.run('./exec_test.sh', capture_output=True, text=True, check=False, timeout=3)
+        proc = subprocess.run('./exec_test.sh', capture_output=True, text=True, check=False, timeout=15)
     except subprocess.TimeoutExpired:
-        return 'Submission timed out.'
+        return 'Submission timed out.', 500
     if proc.returncode != 0:
-        return 'Failed to execute test.'
+        print('Failed to start test env: ', proc.stderr, file=sys.stderr)
+        return 'Failed to execute test.', 500
+    
     with open('../run_env/output.json', 'r') as proc_stdout:
         try:
             test_results = json.loads(proc_stdout.read())
         except json.decoder.JSONDecodeError as err:
-            return 'Failed to execute test' + proc.stdout + proc.stderr + str(proc.returncode)
+            return 'Failed to execute test', 500
         
     if not test_results.get('wrapper_success'):
-        return 'Something went wrong running the test suite.'
-    return test_results
+        print('Something went wrong running the test suite.')
+        return 'Something went wrong running the test suite.', 500
+
+    return test_results, 200
 
 if __name__ == '__main__':
-    if os.environ.get('development') == 'true':
-        app.run(port=3001, debug=True, host='0.0.0.0')
-    else:
-        app.run(port=3001, host='0.0.0.0')
+    app.run(port=3001, debug=True, use_debugger=False, host='0.0.0.0')

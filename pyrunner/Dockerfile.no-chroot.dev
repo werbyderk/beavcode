@@ -1,0 +1,43 @@
+FROM python:alpine3.21
+ENV development="true"
+ENV PYDEVD_DISABLE_FILE_VALIDATION=1
+
+RUN apk add build-base linux-headers wget
+
+# Install global memprof package
+# RUN python -m pip install memory_profiler
+
+
+
+# Sandbox setup
+RUN adduser sandbox -D -h /
+RUN passwd sandbox -d
+WORKDIR /home
+# RUN wget https://raw.githubusercontent.com/werbyderk/alpine-chroot-install/refs/heads/master/alpine-chroot-install
+# RUN chmod 770 alpine-chroot-install
+# RUN ./alpine-chroot-install -d /home/run_env
+# RUN rm alpine-chroot-install
+
+# RUN chroot run_env bin/sh -c "adduser sandbox -D -h /home && passwd sandbox -d && apk add gcc musl-dev linux-headers python3 py3-pip python3-dev && pip install memory_profiler --break-system-packages"
+
+WORKDIR /home/run_env
+COPY run_env/wrapper.py ./
+COPY run_env/exec_mem_profile.sh ./
+RUN chmod 755 exec_mem_profile.sh
+RUN touch output.json
+RUN chmod 666 output.json
+
+# Server setup
+WORKDIR /home/server
+COPY requirements.txt ./
+COPY server/server.py ./
+COPY server/exec_test.sh ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+WORKDIR /home
+RUN chmod 700 -R server
+
+WORKDIR /home/server
+EXPOSE 3001
+
+CMD ["python", "server.py"]

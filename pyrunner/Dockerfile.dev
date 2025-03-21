@@ -1,44 +1,40 @@
-FROM python:alpine3.21
+# FROM python:alpine3.21
+FROM ubuntu:latest
 ENV development="true"
+ENV PYDEVD_DISABLE_FILE_VALIDATION=1
 
-# Server setup
-WORKDIR /usr/src/app/server
-# Server virtual environment set up (run_env should only have access to default modules)
-RUN python -m venv --symlinks --without-scm-ignore-files .venv
-RUN source .venv/bin/activate
-# Server dependencies, source code
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
-COPY server/server.py ./
-COPY server/exec_test.sh ./
-WORKDIR /usr/src/app
-RUN chmod 770 -R server
+# Install packages
+RUN apt-get update -y
+RUN apt-get install python3 python3-pip debootstrap -y
 
 # Sandbox setup
-RUN adduser sandbox -D -h /
-RUN passwd sandbox -d
-WORKDIR /usr/src/app/run_env
+# Create chroot jail
+WORKDIR /home
+RUN mkdir run_env
+RUN debootstrap focal run_env
+RUN chroot run_env /bin/bash -c "adduser --disabled-password --home /home  --gecos \"\" sandbox"
+RUN chroot run_env /bin/bash -c "apt-get install software-properties-common -y"
+RUN chroot run_env /bin/bash -c "add-apt-repository universe && apt-get update -y && apt-get install python3-pip -y && pip3 install memory_profiler"
+WORKDIR /home/run_env/home
 COPY run_env/wrapper.py ./
 RUN touch output.json
-RUN mkdir -p usr/local/bin
-RUN mkdir -p usr/local/lib
-RUN mkdir bin lib etc
-# TODO: only copy sandbox's passwd
-RUN cp /etc/passwd etc
-RUN cp /etc/shadow etc
-# Copy binaries, linked files to chroot jail
-RUN cp $(which sh) bin
-RUN cp $(which login) bin
-RUN cp $(which whoami) bin
-RUN cp $(which su) bin
-RUN cp $(which python) usr/local/bin
-RUN cp /lib/ld-musl-aarch64.so.1 lib
-RUN cp /usr/local/lib/libpython3.13.so.1.0 usr/local/lib
-RUN cp -r /usr/local/lib/python3.13 usr/local/lib
-WORKDIR /usr/src/app
-RUN chmod -R 775 run_env 
-RUN chmod 666 run_env/output.json
 
-WORKDIR /usr/src/app/server
+WORKDIR /home/run_env
+RUN chmod -R 775 home 
+RUN chmod 666 home/output.json
+
+# Server setup
+WORKDIR /home/server
+# Server dependencies, source code
+COPY requirements.txt ./
+RUN pip install --no-cache-dir --break-system-packages -r requirements.txt
+COPY server/server.py ./
+COPY server/exec_test.sh ./
+
+WORKDIR /home
+RUN chmod 770 -R server
+
+WORKDIR /home/server
 EXPOSE 3001
-CMD [ "python", "./server.py" ]
+
+CMD ["python3", "server.py"]
