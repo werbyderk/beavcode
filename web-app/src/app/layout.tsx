@@ -54,13 +54,15 @@ export default async function RootLayout({
               {userData ? (
                 <div className='flex gap-2'>
                   {userData?.streakCount ? <span>{userData.streakCount} Week Streak</span> : undefined}
-                  <Image
-                    src={session?.user?.image || '/default-avatar.png'}
-                    alt='Profile'
-                    width={32}
-                    height={32}
-                    className='rounded-full'
-                  />
+                  <Link href='/profile'>
+                    <Image
+                      src={session?.user?.image || '/default-avatar.png'}
+                      alt='Profile'
+                      width={32}
+                      height={32}
+                      className='rounded-full hover:-translate-y-1 hover:ring-2 ring-black shadow-sm shadow-black transition-all'
+                    />
+                  </Link>
                   <SignOut />
                 </div>
               ) : (

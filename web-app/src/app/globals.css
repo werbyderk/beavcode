@@ -32,6 +32,10 @@ code {
   @apply bg-zinc-300 p-[2px] rounded;
 }
 
+input {
+  @apply bg-zinc-100 border-black border-solid rounded p-[1px];
+}
+
 .black-button {
   @apply inline-flex h-11 items-center justify-center rounded-md border border-foreground px-8 text-sm font-medium text-foreground disabled:opacity-50 cursor-pointer;
 }

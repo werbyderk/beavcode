@@ -1,21 +1,13 @@
 from flask import Flask, request
-
+from flask_cors import CORS
 import subprocess
 import json
-from flask_cors import CORS, cross_origin
 import logging
 logging.basicConfig(level=logging.DEBUG)
 import sys
-# import os
-# TODO: is CORS set up right?
 
 app = Flask(__name__)
-CORS(app, support_credentials=True)
-
-@app.route("/ping", methods=['GET'])
-@cross_origin(supports_credentials=True)
-def ping():
-    return 'Pong!'
+CORS(app)
 
 @app.route("/run", methods=['POST'])
 def run():
@@ -49,4 +41,4 @@ def run():
     return test_results, 200
 
 if __name__ == '__main__':
-    app.run(port=3001, debug=True, use_debugger=False, host='0.0.0.0')
+    app.run(port=3001, host='0.0.0.0')

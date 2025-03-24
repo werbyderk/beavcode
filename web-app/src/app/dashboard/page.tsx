@@ -3,9 +3,11 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { getLeaderboard } from '@/models/leaderboard'
 import Leaderboards from './components/Leaderboards'
+import { getUserFromSession } from '@/models/user'
 
 const Dashboard = async () => {
   const session = await getServerSession()
+  const user = await getUserFromSession(session)
   if (!session) {
     redirect('/api/auth/signin')
   }
@@ -33,7 +35,7 @@ const Dashboard = async () => {
         </Link>
       </div>
 
-      <Leaderboards monthLeaderboardData={leaderboardData} />
+      <Leaderboards monthLeaderboardData={leaderboardData} user={user} />
     </main>
   )
 }

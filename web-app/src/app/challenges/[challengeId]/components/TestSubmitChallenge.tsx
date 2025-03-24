@@ -10,7 +10,6 @@ import Image from 'next/image'
 import { Session } from 'next-auth'
 import { incrementSubmissionCount, updateSubmission } from '@/models/submissions'
 import { redirect } from 'next/navigation'
-import Timer from './Timer'
 
 const AccordionHeader = ({ children }) => <div className='bg-red-300 text-red-600 py-2 px-8  rounded-md'>{children}</div>
 const AItem = ({ header, ...rest }) => (
@@ -127,17 +126,17 @@ const TestSubmitChallenge = ({
           <AItem header={`${pythonErrors.length} Runtime errors`}>
             {pythonErrors.map((pyErr, i) => (
               <div key={i} className='bg-red-200 rounded-b flex'>
-                <span className='whitespace-pre-line mx-4 my-2'>{pyErr}</span>
+                <code className='whitespace-pre-line mx-4 my-2'>{pyErr}</code>
               </div>
             ))}
           </AItem>
         ) : undefined}
         {testFailures.length ? (
-          <AItem header={`${testFailures.length} Unittest errors`}>
+          <AItem header={`${testFailures.length} Unit test errors`}>
             <div className='flex flex-col w-full'>
               {testFailures.map((failure, i) => (
-                <div key={i} className='bg-red-200 rounded-b flex'>
-                  <span className='whitespace-pre-line mx-4 my-2'>{failure}</span>
+                <div key={i} className='bg-red-200 flex'>
+                  <code className='whitespace-pre-line mx-4 my-2'>{failure}</code>
                 </div>
               ))}
             </div>
@@ -156,7 +155,9 @@ const TestSubmitChallenge = ({
 
   return (
     <section>
-      <p className='fixed top-2 left-0 right-0 text-center text-xs'>{formatTime(timeElapsed)}</p>
+      <div className='fixed top-2 left-0 right-0 text-center text-xs'>
+        <span className='bg-white rounded py-2 px-4'>{formatTime(timeElapsed)}</span>
+      </div>
       <div className='flex justify-between w-[420px] m-auto'>
         <input id='file-upload' type='file' onChange={handleFileChange} className='hidden' />
         <label

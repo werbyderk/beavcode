@@ -23,3 +23,7 @@ export const createUserIfNotExists = async (user: typeof usersTable.$inferInsert
 
   return newUser
 }
+
+export const updateUser = async (userId: number, user: Partial<typeof usersTable.$inferInsert>) => {
+  await db.update(usersTable).set(user).where(eq(usersTable.id, userId))
+}

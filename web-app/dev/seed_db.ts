@@ -1,10 +1,11 @@
-import { challengesTable, usersTable } from '@/db/schema'
+import { challengesTable, usersTable, userSubmissionsTable } from '@/db/schema'
 import 'dotenv/config'
 import { drizzle } from 'drizzle-orm/node-postgres'
 import * as schema from '@/db/schema'
 import { seed, reset } from 'drizzle-seed'
 import fs from 'fs'
 import dayjs from 'dayjs'
+import { sql } from 'drizzle-orm'
 
 const main = async () => {
   const db = drizzle({ connection: process.env.DATABASE_URL!, casing: 'snake_case' })
@@ -17,9 +18,12 @@ const main = async () => {
       }
     }
   }))
+
+  // https://github.com/drizzle-team/drizzle-orm/issues/3915#issuecomment-2629330120
+  await db.execute(sql`SELECT setval('users_id_seq', 10, true);`)
   console.log('Seeded users')
 
-  // const users = await db.select({ id: usersTable.id }).from(usersTable)
+  const users = await db.select({ id: usersTable.id }).from(usersTable)
   const day = dayjs().startOf('week')
   for (let i = 0; i < 3; i++) {
     let difficulty = 'easy' as 'easy' | 'medium' | 'hard'
@@ -36,14 +40,31 @@ const main = async () => {
     const markdown = await fs.promises.readFile(`dev/seed_data/challenges/${i}/challenge.md`, 'utf-8')
     const testSourceCode = await fs.promises.readFile(`dev/seed_data/challenges/${i}/challenge.py`, 'utf-8')
     console.log('Insert challenge ', i)
-    await db.insert(challengesTable).values({
-      title: metadata.title,
-      previewDescription: btoa(metadata.preview_description),
-      releaseDate: day.toDate(),
-      difficulty,
-      description: btoa(markdown),
-      testCaseSource: btoa(testSourceCode)
-    })
+    const [challenge] = await db
+      .insert(challengesTable)
+      .values({
+        title: metadata.title,
+        previewDescription: btoa(metadata.preview_description),
+        releaseDate: day.toDate(),
+        difficulty,
+        description: btoa(markdown),
+        testCaseSource: btoa(testSourceCode)
+      })
+      .returning({ id: challengesTable.id })
+
+    for (const { id: userId } of users) {
+      await db.insert(userSubmissionsTable).values({
+        userId,
+        challengeId: challenge.id,
+        completedChallenge: true,
+        runtimeDuration: 100 + Math.ceil(Math.random() * 100),
+        memoryUsage: String(Number(10 + Math.random() * 40).toFixed(2)),
+        numberOfSubmissions: Math.ceil(Math.random() * 6),
+        latestSubmissionDate: new Date(),
+        timeTaken: 9999,
+        score: Math.ceil(500 + Math.random() * 5000)
+      })
+    }
 
     if (i % 3 == 2) {
       day.subtract(1, 'week')

@@ -32,7 +32,7 @@ const ChallengePage = async ({ params }) => {
             <span>Looks like you&apos;ve completed this challenge already. If you want to take another crack, go for it.</span>
           </div>
         ) : undefined}
-        <div className='whitespace-pre-line bg-slate-100 rounded p-4' dangerouslySetInnerHTML={{ __html: descriptionHtml }} />
+        <div className='whitespace-pre-line bg-slate-100 rounded p-4 text-left' dangerouslySetInnerHTML={{ __html: descriptionHtml }} />
       </div>
       {user && submission ? (
         <TestSubmitChallenge

@@ -21,6 +21,7 @@ export const authOptions: AuthOptions = {
         await createUserIfNotExists({ email: user.email!, username: generateUsername(), name: user.name! })
         return true
       } catch (err) {
+        debugger
         console.error(err)
         return false
       }

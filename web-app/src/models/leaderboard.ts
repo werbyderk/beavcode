@@ -1,5 +1,5 @@
 'use server'
-import { challengesTable, usersTable, userSubmissionsTable } from '@/db/schema'
+import { usersTable, userSubmissionsTable } from '@/db/schema'
 import db from '@/db'
 import { desc, eq, gte, avg, sum, max, countDistinct } from 'drizzle-orm'
 import { epoch } from '@/lib/constants'
@@ -15,9 +15,10 @@ export const getLeaderboard = async (timeframe: 'month' | 'all') => {
   const submissions = await db
     .select({
       username: usersTable.username,
+      userId: usersTable.id,
       challengesCompleted: countDistinct(userSubmissionsTable.id),
       avgRuntime: avg(userSubmissionsTable.runtimeDuration).mapWith(Number),
-      avgMemory: avg(userSubmissionsTable.timeTaken).mapWith(Number),
+      avgMemory: avg(userSubmissionsTable.memoryUsage).mapWith(Number),
       beavScore: sum(userSubmissionsTable.score).mapWith(Number),
       lastSubmissionDate: max(userSubmissionsTable.latestSubmissionDate)
     })
@@ -25,7 +26,7 @@ export const getLeaderboard = async (timeframe: 'month' | 'all') => {
     .where(gte(userSubmissionsTable.latestSubmissionDate, timeframe === 'month' ? oneMonthAgo : epoch))
     .innerJoin(usersTable, eq(userSubmissionsTable.userId, usersTable.id))
     .groupBy(usersTable.id)
-    .orderBy(desc(max(userSubmissionsTable.latestSubmissionDate)))
+    .orderBy(desc(sum(userSubmissionsTable.score)))
 
   return submissions
 }

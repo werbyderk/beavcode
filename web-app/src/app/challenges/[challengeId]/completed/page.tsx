@@ -1,4 +1,5 @@
 import { getServerSession } from '@/lib/auth'
+import { getChallenge } from '@/models/challenge'
 import { getSubmission, getSubmissionRank, getSubmissionsForChallenge } from '@/models/submissions'
 import { getUserFromSession } from '@/models/user'
 import Link from 'next/link'
@@ -16,6 +17,7 @@ const CompletedChallengePage = async ({ params }: any) => {
   const { challengeId } = await params
   const submission = await getSubmission(userId, challengeId)
   const allSubmissions = await getSubmissionsForChallenge(challengeId)
+  const challenge = await getChallenge(challengeId)
   if (!submission || !allSubmissions) {
     return <p>Hm, there&apos;s nothing to show here</p>
   }
@@ -29,7 +31,7 @@ const CompletedChallengePage = async ({ params }: any) => {
     <main className='p-8'>
       <h1 className='text-4xl font-bold text-center'>Well Done!</h1>
       <p className='text-center mb-8'>
-        You ranked <strong>#{rank}</strong> out of {total} other users
+        You ranked <strong>#{rank}</strong> out of {total} users
       </p>
       <div className='flex flex-col px-16 space-y-8'>
         <table className='table-auto w-fit mx-auto'>
@@ -60,7 +62,7 @@ const CompletedChallengePage = async ({ params }: any) => {
         </table>
 
         <div>
-          <h2 className='text-2xl font-bold mb-2'>Leaderboards</h2>
+          <h2 className='text-2xl font-bold mb-2'>{challenge?.title} Leaderboards</h2>
           <table className='w-full rounded-lg bg-gray-100 max-h-[600px] overflow-y-auto'>
             <thead>
               <tr>

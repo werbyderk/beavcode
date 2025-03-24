@@ -56,7 +56,7 @@ export const getAllChallenges = async (userId?: number): Promise<ChallengeMaybeW
     const challenges = await db
       .select()
       .from(challengesTable)
-      .where(lt(challengesTable.releaseDate, new Date()))
+      .where(lte(challengesTable.releaseDate, new Date()))
       .orderBy(desc(challengesTable.releaseDate))
     return challenges.map((c) => ({ challenges: c }))
   }

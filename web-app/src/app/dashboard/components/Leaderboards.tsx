@@ -1,10 +1,12 @@
 'use client'
 
 import db from '@/db'
+import { usersTable } from '@/db/schema'
 import { getLeaderboard, Leaderboard } from '@/models/leaderboard'
+import { InferSelectModel } from 'drizzle-orm'
 import { useState } from 'react'
 
-const Leaderboards = ({ monthLeaderboardData }: { monthLeaderboardData: Leaderboard }) => {
+const Leaderboards = ({ monthLeaderboardData, user }: { monthLeaderboardData: Leaderboard; user: InferSelectModel<typeof usersTable> }) => {
   const [displayLB, setDisplayLB] = useState('month')
   const [lbData, setLBData] = useState<{ month: Leaderboard; all: Leaderboard }>({ month: monthLeaderboardData, all: [] })
 
@@ -56,10 +58,10 @@ const Leaderboards = ({ monthLeaderboardData }: { monthLeaderboardData: Leaderbo
           </thead>
           <tbody>
             {lbData[displayLB].map((entry, i) => (
-              <tr key={i} className='border-t border-foreground/10'>
-                <td className='p-4'>{entry.username}</td>
-                <td className='p-4'>{entry.avgRuntime}ms</td>
-                <td className='p-4'>{entry.avgMemory}mb</td>
+              <tr key={i} className={`border-t border-foreground/10 ${entry.userId === user.id ? 'bg-green-200' : ''}`}>
+                <td className='p-4'>{entry.username + (entry.userId === user.id ? ' (you)' : '')}</td>
+                <td className='p-4'>{entry.avgRuntime.toFixed(2)} ms</td>
+                <td className='p-4'>{entry.avgMemory.toFixed(2)} MB</td>
                 <td className='p-4'>{entry.challengesCompleted}</td>
                 <td className='p-4'>{entry.beavScore}</td>
               </tr>
