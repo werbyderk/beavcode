@@ -1,9 +1,10 @@
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
+
 import { getServerSession } from '@/lib/auth'
 import { getChallenge } from '@/models/challenge'
 import { getSubmission } from '@/models/submissions'
 import { getUserFromSession } from '@/models/user'
-import Link from 'next/link'
-import { redirect } from 'next/navigation'
 
 const ChallengePreview = async ({ params }) => {
   const { challengeId } = await params

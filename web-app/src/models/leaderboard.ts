@@ -1,7 +1,8 @@
 'use server'
-import { usersTable, userSubmissionsTable } from '@/db/schema'
+import { avg, countDistinct,desc, eq, gte, max, sum } from 'drizzle-orm'
+
 import db from '@/db'
-import { desc, eq, gte, avg, sum, max, countDistinct } from 'drizzle-orm'
+import { usersTable, userSubmissionsTable } from '@/db/schema'
 import { epoch } from '@/lib/constants'
 
 export type Leaderboard = Awaited<ReturnType<typeof getLeaderboard>>

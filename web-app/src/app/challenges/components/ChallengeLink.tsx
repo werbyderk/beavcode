@@ -1,7 +1,8 @@
-import Link from 'next/link'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCheck, faCircleNotch } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { InferSelectModel } from 'drizzle-orm'
+import Link from 'next/link'
+
 import { challengesTable, userSubmissionsTable } from '@/db/schema'
 
 const ChallengeLink = ({

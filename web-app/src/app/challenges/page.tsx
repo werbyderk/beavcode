@@ -1,7 +1,9 @@
+import dayjs from 'dayjs'
+
 import { getServerSession } from '@/lib/auth'
 import { getAllChallenges, groupChallengesByDate } from '@/models/challenge'
 import { getUserFromSession } from '@/models/user'
-import dayjs from 'dayjs'
+
 import ChallengeLink from './components/ChallengeLink'
 
 const Challenges = async () => {

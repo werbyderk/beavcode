@@ -1,9 +1,11 @@
-import { getServerSession } from '@/lib/auth'
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
+
+import { getServerSession } from '@/lib/auth'
 import { getLeaderboard } from '@/models/leaderboard'
-import Leaderboards from './components/Leaderboards'
 import { getUserFromSession } from '@/models/user'
+
+import Leaderboards from './components/Leaderboards'
 
 const Dashboard = async () => {
   const session = await getServerSession()

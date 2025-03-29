@@ -1,10 +1,11 @@
+import { redirect } from 'next/navigation'
+
 import { getServerSession } from '@/lib/auth'
 import { getChallenge } from '@/models/challenge'
 import { getSubmission, getSubmissionRank, getSubmissionsForChallenge } from '@/models/submissions'
 import { getUserFromSession } from '@/models/user'
-import Link from 'next/link'
-import { redirect } from 'next/navigation'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CompletedChallengePage = async ({ params }: any) => {
   const session = await getServerSession()
   const user = await getUserFromSession(session)

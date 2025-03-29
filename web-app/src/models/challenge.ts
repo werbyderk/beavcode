@@ -1,9 +1,10 @@
+import dayjs from 'dayjs'
+import weekOfYear from 'dayjs/plugin/weekOfYear'
+import { and, desc, eq, gte, InferSelectModel, lte } from 'drizzle-orm'
+
 import db from '@/db'
 import { challengesTable, userSubmissionsTable } from '@/db/schema'
 import { epoch } from '@/lib/constants'
-import dayjs from 'dayjs'
-import weekOfYear from 'dayjs/plugin/weekOfYear'
-import { and, desc, eq, gte, InferSelectModel, lt, lte } from 'drizzle-orm'
 
 dayjs.extend(weekOfYear)
 

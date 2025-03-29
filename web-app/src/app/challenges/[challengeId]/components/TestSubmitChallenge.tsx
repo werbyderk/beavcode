@@ -1,18 +1,15 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
-import { useState, useEffect } from 'react'
-import { toast } from 'react-hot-toast'
-import axios, { AxiosError } from 'axios'
 import { Accordion, AccordionItem } from '@szhsin/react-accordion'
-import chevron from '@/../public/chevron-down.svg'
+import axios, { AxiosError } from 'axios'
 import Image from 'next/image'
-import { Session } from 'next-auth'
-import { incrementSubmissionCount, updateSubmission } from '@/models/submissions'
 import { redirect } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { toast } from 'react-hot-toast'
 
-const AccordionHeader = ({ children }) => <div className='bg-red-300 text-red-600 py-2 px-8  rounded-md'>{children}</div>
-const AItem = ({ header, ...rest }) => (
+import { incrementSubmissionCount, updateSubmission } from '@/models/submissions'
+
+const AItem = ({ header, ...rest }: { [key: string]: unknown; header: string }) => (
   <AccordionItem
     {...rest}
     header={({ state: { isEnter } }) => (

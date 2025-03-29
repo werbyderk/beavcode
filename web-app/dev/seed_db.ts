@@ -1,11 +1,13 @@
-import { challengesTable, usersTable, userSubmissionsTable } from '@/db/schema'
 import 'dotenv/config'
-import { drizzle } from 'drizzle-orm/node-postgres'
-import * as schema from '@/db/schema'
-import { seed, reset } from 'drizzle-seed'
-import fs from 'fs'
+
 import dayjs from 'dayjs'
 import { sql } from 'drizzle-orm'
+import { drizzle } from 'drizzle-orm/node-postgres'
+import { reset,seed } from 'drizzle-seed'
+import fs from 'fs'
+
+import { challengesTable, usersTable, userSubmissionsTable } from '@/db/schema'
+import * as schema from '@/db/schema'
 
 const main = async () => {
   const db = drizzle({ connection: process.env.DATABASE_URL!, casing: 'snake_case' })

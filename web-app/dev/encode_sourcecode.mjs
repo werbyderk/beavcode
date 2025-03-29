@@ -1,9 +1,13 @@
-const fs = require('fs')
-const path = require('path')
+import { readFile } from 'fs'
+import { dirname, join } from 'path'
+import { fileURLToPath } from 'url'
 
-const pyPath = path.join(__dirname, 'test.py')
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
-fs.readFile(pyPath, 'utf8', (err, data) => {
+const pyPath = join(__dirname, 'test.py')
+
+readFile(pyPath, 'utf8', (err, data) => {
   if (err) {
     console.error('Error reading file:', err)
     return
@@ -13,8 +17,8 @@ fs.readFile(pyPath, 'utf8', (err, data) => {
   console.log(base64Encoded)
 })
 
-const mdPath = path.join(__dirname, 'challenge_description.md')
-fs.readFile(mdPath, 'utf8', (err, data) => {
+const mdPath = join(__dirname, 'challenge_description.md')
+readFile(mdPath, 'utf8', (err, data) => {
   if (err) {
     console.error('Error reading file:', err)
     return

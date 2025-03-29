@@ -1,13 +1,13 @@
 'use client'
 
-import db from '@/db'
-import { usersTable } from '@/db/schema'
-import { getLeaderboard, Leaderboard } from '@/models/leaderboard'
 import { InferSelectModel } from 'drizzle-orm'
 import { useState } from 'react'
 
+import { usersTable } from '@/db/schema'
+import { getLeaderboard, Leaderboard } from '@/models/leaderboard'
+
 const Leaderboards = ({ monthLeaderboardData, user }: { monthLeaderboardData: Leaderboard; user: InferSelectModel<typeof usersTable> }) => {
-  const [displayLB, setDisplayLB] = useState('month')
+  const [displayLB, setDisplayLB] = useState<'month' | 'all'>('month')
   const [lbData, setLBData] = useState<{ month: Leaderboard; all: Leaderboard }>({ month: monthLeaderboardData, all: [] })
 
   const onLeaderboardTimeViewChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {

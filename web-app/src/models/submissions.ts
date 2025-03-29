@@ -1,9 +1,9 @@
 'use server'
 
+import { and, count, desc, eq, gt, InferInsertModel, InferSelectModel } from 'drizzle-orm'
+
 import db from '@/db'
 import { challengesTable, usersTable, userSubmissionsTable } from '@/db/schema'
-import { eq, and, gt, InferInsertModel, InferSelectModel, count, desc } from 'drizzle-orm'
-import { memoryUsage } from 'process'
 
 const DIFFICULTY_MULTIPLIER = { easy: 100000, medium: 200000, hard: 350000 }
 

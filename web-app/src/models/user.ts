@@ -1,9 +1,10 @@
 'use server'
 
-import db from '@/db'
-import { usersTable } from '@/db/schema'
 import { eq } from 'drizzle-orm'
 import { Session } from 'next-auth'
+
+import db from '@/db'
+import { usersTable } from '@/db/schema'
 
 export const getUserFromSession = async (session: Session | null) => {
   if (!session?.user?.email) {

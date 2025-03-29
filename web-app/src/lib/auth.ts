@@ -1,11 +1,9 @@
 import { getServerSession as _getServerSession } from 'next-auth'
-import GoogleProvider from 'next-auth/providers/google'
-import { usersTable } from '@/db/schema'
-import db from '@/db'
-import { eq } from 'drizzle-orm'
 import { AuthOptions } from 'next-auth'
-import { createUserIfNotExists } from '@/models/user'
+import GoogleProvider from 'next-auth/providers/google'
 import { generateUsername } from 'unique-username-generator'
+
+import { createUserIfNotExists } from '@/models/user'
 
 export const authOptions: AuthOptions = {
   secret: process.env.AUTH_SECRET,

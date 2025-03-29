@@ -1,8 +1,9 @@
 'use client'
 
-import { updateUser } from '@/models/user'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
+
+import { updateUser } from '@/models/user'
 
 const ProfileForm = ({ userId }: { userId: number }) => {
   const router = useRouter()

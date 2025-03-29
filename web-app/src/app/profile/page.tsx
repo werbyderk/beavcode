@@ -1,6 +1,8 @@
+import { redirect } from 'next/navigation'
+
 import { getServerSession } from '@/lib/auth'
 import { getUserFromSession } from '@/models/user'
-import { redirect } from 'next/navigation'
+
 import ProfileForm from './components/profileForm'
 
 const Profile = async () => {

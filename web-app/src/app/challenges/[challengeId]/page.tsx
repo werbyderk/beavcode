@@ -1,11 +1,11 @@
+import { Converter } from 'showdown'
+
 import { getServerSession } from '@/lib/auth'
 import { getChallenge } from '@/models/challenge'
-import { getUserFromSession } from '@/models/user'
-import SessionProvider from '@/app/components/SessionProvider'
-import TestSubmitChallenge from './components/TestSubmitChallenge'
 import { createSubmission, getSubmission } from '@/models/submissions'
-import { Converter } from 'showdown'
-import Timer from './components/Timer'
+import { getUserFromSession } from '@/models/user'
+
+import TestSubmitChallenge from './components/TestSubmitChallenge'
 
 const ChallengePage = async ({ params }) => {
   const session = await getServerSession()
