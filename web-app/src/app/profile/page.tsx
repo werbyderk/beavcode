@@ -16,7 +16,7 @@ const Profile = async () => {
   return (
     <main className='p-8'>
       <h1>Profile settings</h1>
-      <p className='italic mb-4'>Yes, many features to change here</p>
+      <p className='italic mb-4'>Yes; many features to change here</p>
       <p>
         Your username: <strong>{user.username}</strong>
       </p>

@@ -6,7 +6,8 @@ import { getChallenge } from '@/models/challenge'
 import { getSubmission } from '@/models/submissions'
 import { getUserFromSession } from '@/models/user'
 
-const ChallengePreview = async ({ params }) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ChallengePreview = async ({ params }: any) => {
   const { challengeId } = await params
   const session = await getServerSession()
   const user = await getUserFromSession(session)

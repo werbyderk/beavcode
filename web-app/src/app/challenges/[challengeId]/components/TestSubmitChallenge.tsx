@@ -45,6 +45,15 @@ const TestSubmitChallenge = ({
   challengeId: number
   userId: number
 }) => {
+  // TODO meh
+  const getCurrentDomain = () => {
+    if (typeof window !== 'undefined') {
+      return window.location.origin
+    }
+    return ''
+  }
+
+  const domain = getCurrentDomain()
   const [testStatus, setTestStatus] = useState({ isPending: false, success: false, runtime: 0, testFailures: [], runtimeErrors: [] })
   const [submitting, setSubmitting] = useState(false)
   const [timeElapsed, setTimeElapsed] = useState(0)
@@ -70,7 +79,7 @@ const TestSubmitChallenge = ({
     setTestStatus((prev) => ({ ...prev, isPending: true }))
     const pendingToast = toast.loading('Running tests...')
     try {
-      const testResponse = await axios.postForm('http://127.0.0.1:3001/run', formData)
+      const testResponse = await axios.postForm(`${domain}/api/submission`, formData)
       toast.dismiss(pendingToast)
       if (testResponse.status === 200) {
         setTestStatus((prev) => ({ ...prev, success: testResponse.data.test_success, runtime: testResponse.data.test_runtime ?? 0 }))

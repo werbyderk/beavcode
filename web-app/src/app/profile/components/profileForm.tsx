@@ -26,7 +26,7 @@ const ProfileForm = ({ userId }: { userId: number }) => {
   return (
     <section>
       <label>New username: </label>
-      <input id='username-input'></input>
+      <input id='username-input' className='border bg-slate-200'></input>
       <br />
       <button className='black-button' onClick={onSubmit}>
         Save

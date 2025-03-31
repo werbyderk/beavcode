@@ -1,3 +1,5 @@
+import 'dotenv/config'
+
 import { Converter } from 'showdown'
 
 import { getServerSession } from '@/lib/auth'
@@ -7,7 +9,8 @@ import { getUserFromSession } from '@/models/user'
 
 import TestSubmitChallenge from './components/TestSubmitChallenge'
 
-const ChallengePage = async ({ params }) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ChallengePage = async ({ params }: any) => {
   const session = await getServerSession()
   const user = await getUserFromSession(session)
   const { challengeId } = await params

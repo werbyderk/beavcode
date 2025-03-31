@@ -10,7 +10,7 @@ import Leaderboards from './components/Leaderboards'
 const Dashboard = async () => {
   const session = await getServerSession()
   const user = await getUserFromSession(session)
-  if (!session) {
+  if (!session || !user) {
     redirect('/api/auth/signin')
   }
   if (!session.user?.email) {
