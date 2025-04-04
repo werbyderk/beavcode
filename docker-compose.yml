@@ -26,19 +26,19 @@ services:
   web-app:
     container_name: web-app
     build: ./web-app/
-    # ports:
-    #   - '3000:3000'
+    ports:
+      - '80:3000'
     # depends_on:
     #   db:
     #     condition: service_healthy
     #     restart: true
     # pyrunner:
     #   condition: service_started
-  proxy:
-    container_name: proxy
-    build: ./nginx
-    ports:
-      - '443:443'
+  # proxy:
+  #   container_name: proxy
+  #   build: ./nginx
+  #   ports:
+  #     - '443:443'
 
 volumes:
   db:
