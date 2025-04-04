@@ -1,0 +1,1 @@
+ssh -l root 137.184.51.103 "rm -rf beavcode && git clone https://github.com/werbyderk/beavcode.git && cd beavcode && docker compose up -d"
