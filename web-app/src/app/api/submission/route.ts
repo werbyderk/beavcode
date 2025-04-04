@@ -19,8 +19,10 @@ export async function POST(req: NextRequest) {
     } catch (err) {
       const axiosErr = err as AxiosError
       if (axiosErr.code == 'ERR_BAD_RESPONSE') {
+        console.error('Failed to submit file: ', axiosErr.response?.data)
         return NextResponse.json({ error: 'Bad file' }, { status: 500 })
       } else {
+        console.error('PyRunner down.', axiosErr.response?.data)
         return NextResponse.json({ error: 'Unavailable' }, { status: 503 })
       }
     }

@@ -22,7 +22,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.1'
+          cpus: '0.5'
   web-app:
     container_name: web-app
     build: ./web-app/
